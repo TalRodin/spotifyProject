@@ -12,18 +12,39 @@ function App() {
   // const [token, setToken] = useState(null)
   const [{ user, token }, dispatch] = useDataLayerValue()
 
-  useEffect(()=>{
-    const hash = getTokenFromUrl()
-    window.location.hash=""
+  useEffect(() => {
+    // Set token
+    const hash = getTokenFromUrl ();
+    window.location.hash = "";
     let _token = hash.access_token;
 
     if (_token) {
-      spotify.setAccessToken(_token)
+      spotify.setAccessToken(_token);
+
       dispatch({
         type: "SET_TOKEN",
         token: _token,
-      })
-      // setToken(_token)
+      });
+
+      spotify.getPlaylist("37i9dQZEVXcMYEv57JVY49").then((response) =>
+        dispatch({
+          type: "SET_DISCOVER_WEEKLY",
+          discover_weekly: response,
+        })
+      );
+
+      spotify.getMyTopArtists().then((response) =>
+        dispatch({
+          type: "SET_TOP_ARTISTS",
+          top_artists: response,
+        })
+      );
+
+      dispatch({
+        type: "SET_SPOTIFY",
+        spotify: spotify,
+      });
+
       spotify.getMe().then((user) => {
         dispatch({
           type: "SET_USER",
@@ -31,16 +52,14 @@ function App() {
         });
       });
 
+      spotify.getUserPlaylists().then((playlists) => {
+        dispatch({
+          type: "SET_PLAYLISTS",
+          playlists,
+        });
+      });
     }
-    
-    spotify.getUserPlaylists().then((playlists)=>{
-      dispatch({
-        type: "SET_PLAYLISTS",
-        playlists:playlists
-      })
-    })
-    
-  },[token])
+  }, [token, dispatch]);
   
   return (
     //BEM

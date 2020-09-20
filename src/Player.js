@@ -4,16 +4,16 @@ import Sidebar from './Sidebar.js'
 import Body from './Body.js'
 import Footer from './Footer.js'
 
-function Player({spotify}) {
+function Player({ spotify }) {
     return (
-        <div className="player">
-           <div className="player__body">
-                <Sidebar/>
-                <Body />
-           </div>
-           <Footer/>
+      <div className="player">
+        <div className="player__body">
+          <Sidebar />
+          <Body spotify={spotify} />
         </div>
-    )
-}
-
-export default Player
+        <Footer spotify={spotify} />
+      </div>
+    );
+  }
+  
+  export default Player;
